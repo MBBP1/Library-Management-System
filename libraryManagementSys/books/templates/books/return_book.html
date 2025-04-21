@@ -1,0 +1,20 @@
+<!-- filepath: g:\Mit drev\IT-Teknolog Folder\40 Programmering\Sem. 2\python2025\Oblikatorisk aflevering\Opgave 2_v1\libraryManagementSys\books\templates\books\return_book.html -->
+{% extends 'books/base.html' %}
+
+{% block content %}
+<h1>Return Book</h1>
+<p>Book: {{ record.book.title }}</p>
+<p>Borrowed on: {{ record.borrow_date }}</p>
+<p>Due date: {{ record.due_date }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    <label for="condition">Condition:</label>
+    <select name="condition" id="condition" class="form-control">
+        <option value="good">Good</option>
+        <option value="damaged">Damaged</option>
+        <option value="lost">Lost</option>
+    </select>
+    <button type="submit" class="btn btn-primary mt-3">Return Book</button>
+</form>
+{% endblock %}

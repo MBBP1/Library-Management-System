@@ -1,0 +1,83 @@
+{% extends 'books/base.html' %}
+
+{% block content %}
+<h1 class="mt-4">{{ request.user.username|capfirst }}'s Borrowed and Reserved Books</h1>
+
+<!-- Lånte bøger -->
+<h2 class="mt-4">Borrowed Books</h2>
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Borrow Date</th>
+            <th>Due Date</th>
+            <th>Fine</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in borrowed_books %}
+        <tr>
+            <td>{{ record.book.title }}</td>
+            <td>{{ record.book.author }}</td>
+            <td>{{ record.borrow_date }}</td>
+            <td>{{ record.due_date }}</td>
+            <td>${{ record.fine }}</td>
+            <td>
+                {% if not record.return_date %}
+                <a href="{% url 'return_book' record.book.id %}" class="btn btn-primary btn-sm">Return</a>
+                {% else %}
+                Returned
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" class="text-center">You have not borrowed any books.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<!-- Reserverede bøger -->
+<h2 class="mt-4">Reserved Books</h2>
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for reservation in reserved_books %}
+        <tr>
+            <td>{{ reservation.book.title }}</td>
+            <td>{{ reservation.book.author }}</td>
+            <td>{{ reservation.reserved_at }}</td>
+
+            <td>
+                {% if reservation.notified %}
+                <span class="text-danger">Now Available!</span>
+                {% else %}
+                <span class="text-muted">Waiting</span>
+                {% endif %}
+            </td>
+            <td>
+                <form method="post" action="{% url 'cancel_reservation' reservation.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Cancel</button>
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5" class="text-center">You have not reserved any books.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

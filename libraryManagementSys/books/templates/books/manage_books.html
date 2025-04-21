@@ -1,0 +1,35 @@
+{% extends 'books/base.html' %}
+
+{% block content %}
+<h1 class="mt-4">Manage Books</h1>
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>ISBN</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book in books %}
+        <tr>
+            <td>{{ book.title }}</td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.isbn }}</td>
+            <td>
+                <a href="{% url 'edit_book' book.id %}" class="btn btn-warning btn-sm">Edit</a>
+                <form method="post" action="{% url 'delete_book' book.id %}" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4" class="text-center">No books found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

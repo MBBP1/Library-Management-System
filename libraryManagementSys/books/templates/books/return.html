@@ -1,0 +1,36 @@
+{% extends 'books/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h1 class="card-title">{{ book.title }}</h1>
+        </div>
+        <div class="card-body">
+            <p><strong>Author:</strong> {{ book.author }}</p>
+            <p><strong>ISBN:</strong> {{ book.isbn }}</p>
+            <p><strong>Publisher:</strong> {{ book.publisher }}</p>
+            <p><strong>Published Date:</strong> {{ book.published_date }}</p>
+            <p><strong>Available:</strong> {{ book.available }}/{{ book.quantity }}</p>
+            
+            {% if book.available > 0 %}
+            <a href="{% url 'borrow_book' book_id=book.pk %}" class="btn btn-success mt-3">Borrow</a>
+            {% endif %}
+            
+            {% if book.quantity - book.available > 0 %}
+            <form method="post" action="{% url 'return_book' book_id=book.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-warning mt-3">Return</button>
+            </form>
+            {% endif %}
+            
+            {% if book.available == 0 %}
+            <form method="post" action="{% url 'reserve_book' book.pk %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary mt-3">Reserve</button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

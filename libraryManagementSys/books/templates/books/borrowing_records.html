@@ -1,0 +1,44 @@
+<!-- filepath: g:\Mit drev\IT-Teknolog Folder\40 Programmering\Sem. 2\python2025\Oblikatorisk aflevering\Opgave 2_v1\libraryManagementSys\books\templates\books\borrowing_records.html -->
+{% extends 'books/base.html' %}
+
+{% block content %}
+<h1 class="mt-4">Borrowing Records</h1>
+
+<!-- Search Form -->
+<form method="get" action="{% url 'view_borrowing_records' %}" class="mb-4">
+    <div class="input-group">
+        <input type="text" name="q" class="form-control" placeholder="Search by member name or membership number" value="{{ query }}">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</form>
+
+<!-- Borrowing Records Table -->
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Member</th>
+            <th>Book</th>
+            <th>Borrow Date</th>
+            <th>Due Date</th>
+            <th>Return Date</th>
+            <th>Fine</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in borrowing_records %}
+        <tr>
+            <td>{{ record.member.user.get_full_name }} ({{ record.member.membership_number }})</td>
+            <td>{{ record.book.title }}</td>
+            <td>{{ record.borrow_date }}</td>
+            <td>{{ record.due_date }}</td>
+            <td>{{ record.return_date|default:"Not Returned" }}</td>
+            <td>${{ record.fine }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" class="text-center">No borrowing records found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

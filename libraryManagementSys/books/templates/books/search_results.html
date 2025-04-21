@@ -1,0 +1,47 @@
+<!-- filepath: g:\Mit drev\IT-Teknolog Folder\40 Programmering\Sem. 2\python2025\Oblikatorisk aflevering\Opgave 2_v1\libraryManagementSys\books\templates\books\search_results.html -->
+{% extends 'books/base.html' %}
+
+{% block content %}
+<h1 class="mt-4">Search and Filter Books</h1>
+
+<form method="get" action="{% url 'search_books' %}" class="mb-4">
+    <div class="row">
+        <div class="col-md-6">
+            <input type="text" name="q" value="{{ query }}" placeholder="Search by title, author, ISBN..." class="form-control">
+        </div>
+        <div class="col-md-4">
+            <input type="text" name="category" value="{{ category }}" placeholder="Filter by category..." class="form-control">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Search</button>
+        </div>
+    </div>
+</form>
+
+{% if books %}
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>ISBN</th>
+            <th>Category</th>
+            <th>Available</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book in books %}
+        <tr>
+            <td>{{ book.title }}</td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.isbn }}</td>
+            <td>{{ book.category }}</td>
+            <td>{{ book.available }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No books found matching your search.</p>
+{% endif %}
+{% endblock %}

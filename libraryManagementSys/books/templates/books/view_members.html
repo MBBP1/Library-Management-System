@@ -1,0 +1,37 @@
+<!-- filepath: g:\Mit drev\IT-Teknolog Folder\40 Programmering\Sem. 2\python2025\Oblikatorisk aflevering\Opgave 2_v1\libraryManagementSys\books\templates\books\view_members.html -->
+{% extends 'books/base.html' %}
+
+{% block content %}
+<h1 class="mt-4">All Members</h1>
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th>Membership Number</th>
+            <th>Username</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for member in members %}
+        <tr>
+            <td>{{ member.membership_number }}</td>
+            <td>{{ member.user.username }}</td>
+            <td>{{ member.user.get_full_name }}</td>
+            <td>{{ member.user.email }}</td>
+            
+
+            <td>
+                <a href="{% url 'edit_member' member.id %}" class="btn btn-warning btn-sm">Edit</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="5" class="text-center">No members found.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
